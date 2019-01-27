@@ -3,6 +3,8 @@ var path = require('path');
 var mongoose = require('mongoose');
 var config = require('./config/database');
 var bodyParser = require('body-parser');
+var session = require('express-session');
+var expressValidator = require('express-validator');
 
 // connect database 
 mongoose.connect(config.database);
@@ -21,6 +23,8 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+// setup midle ware
+
 // setup body parser
 // par application/x-www-form-urlencoded
 app.use(bodyParser, urlencoded({ extended: false }));
@@ -28,15 +32,31 @@ app.use(bodyParser, urlencoded({ extended: false }));
 // 2-parse application/json
 app.use(bodyParser.json());
 
-
-
-
-
-
-
-
-// setup home index
-// set rout
+// setup session
+app.use(session({
+    secret: 'keywoard cat',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: true }
+}));
+// setup validator
+app.use(expressValidator({
+        errorFormatter: function(param, msg, value) {
+            var namespace = param.split('.'),
+                root = namespace.shift(),
+                formParam = root;
+            while (namespace.length) {
+                formParam += '[' + namespace.shift() + ']';
+            }
+            return {
+                param: formParam,
+                msg: msg,
+                value: value
+            };
+        }
+    }))
+    // setup home index
+    // set rout
 var pages = require('./routes/pages');
 var adminPages = require('./routes/admin_pages');
 
