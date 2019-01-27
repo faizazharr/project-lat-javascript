@@ -21,7 +21,9 @@ app.set('view engine', 'ejs');
 
 // setup home index
 app.get('/', function(req, res) {
-    res.send('ini adalah Home Index') //send atau json bisa semua    
+    res.render('index', {
+            title: 'Home eSHOP'
+        }) //send atau json bisa semua    
 });
 
 // setup public folder
