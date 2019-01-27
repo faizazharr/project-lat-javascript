@@ -27,7 +27,7 @@ app.set('view engine', 'ejs');
 
 // setup body parser
 // par application/x-www-form-urlencoded
-app.use(bodyParser, urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // 2-parse application/json
 app.use(bodyParser.json());
@@ -39,24 +39,33 @@ app.use(session({
     saveUninitialized: true,
     cookie: { secure: true }
 }));
+
 // setup validator
 app.use(expressValidator({
-        errorFormatter: function(param, msg, value) {
-            var namespace = param.split('.'),
-                root = namespace.shift(),
-                formParam = root;
-            while (namespace.length) {
-                formParam += '[' + namespace.shift() + ']';
-            }
-            return {
-                param: formParam,
-                msg: msg,
-                value: value
-            };
+    errorFormatter: function(param, msg, value) {
+        var namespace = param.split('.'),
+            root = namespace.shift(),
+            formParam = root;
+        while (namespace.length) {
+            formParam += '[' + namespace.shift() + ']';
         }
-    }))
-    // setup home index
-    // set rout
+        return {
+            param: formParam,
+            msg: msg,
+            value: value
+        };
+    }
+}));
+
+//setup express messages
+app.use(require('connect-flash')());
+app.use(function(req, res, next) {
+    res.locals.messages = require('express-messages')(req, res);
+    next();
+});
+
+// setup home index
+// set rout
 var pages = require('./routes/pages');
 var adminPages = require('./routes/admin_pages');
 
