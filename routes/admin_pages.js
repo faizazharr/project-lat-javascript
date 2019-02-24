@@ -3,10 +3,48 @@ var router = express.Router();
 
 // setup route home index
 router.get('/', function(req, res) {
-    res.json('Ini Admin Area');
+    var listbuku = [];
+    var buku1 = {
+        nama: "Nama 1",
+        deskripsi: "Deskripsi 1"
+    }
+    var buku2 = {
+        nama: "Nama 2",
+        deskripsi: "Deskripsi 2"
+    }
+    listbuku[0] = buku1;
+    listbuku[1] = buku2;
+    var data = {
+        title: 'Daftar Buku',
+        listbuku: listbuku
+    }
+    res.json(data);
+});
+
+router.post('/', function(req, res) {
+    var dataDariClient = req.body.datakirim;
+    console.log(dataDariClient);
+    var listbuku = [];
+    var buku1 = {
+        nama: "Nama 1",
+        deskripsi: "Deskripsi 1"
+    }
+    var buku2 = {
+        nama: "Nama 2",
+        deskripsi: "Deskripsi 2"
+    }
+    listbuku[0] = buku1;
+    listbuku[1] = buku2;
+    var data = {
+        dariclient: dataDariClient,
+        title: 'Daftar Buku',
+        listbuku: listbuku
+    }
+    res.json(data);
 });
 
 //setup route get add-page
+/*
 router.get('/add-page', function(req, res) {
     var title = "";
     var slug = "";
@@ -18,6 +56,7 @@ router.get('/add-page', function(req, res) {
         content: content
     })
 });
+*/
 
 // setup route POST add-page
 router.post('/add-page', function(req, res) {
